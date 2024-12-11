@@ -1,0 +1,11 @@
+
+{% extends 'service/base.html' %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Войти</button>
+    <li><a href="{% url 'user:reset_password' %}" class="text-white">Сброс пароля</a></li>
+</form>
+<a href="{% url 'service:home' %}">Назад</a>
+{% endblock %}

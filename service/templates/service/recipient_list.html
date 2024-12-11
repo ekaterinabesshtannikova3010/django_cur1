@@ -1,14 +1,14 @@
-{% extends 'servise/base.html' %}
-{% load my_tags %}
+{% extends 'service/base.html' %}
 {% block content %}
 <h1>Список получателей рассылки</h1>
-<a href="{% url 'recipient_add' %}">Добавить нового получателя</a>
+<a href="{% url 'service:recipient_add' %}">Добавить нового получателя</a>
 <ul>
     {% for recipient in recipients %}
         <li>
-            {{ subscriber.surname }} - {{ subscriber.email }}
-            <a href="{% url 'recipient_edit' recipient.pk %}">Редактировать</a>
-            <a href="{% url 'recipient_delete' recipient.pk %}">Удалить</a>
+            {{ recipient.surname }} - {{ recipient.email }}
+            <a href="{% url 'service:recipient_edit' recipient.pk %}">Редактировать</a>
+            <a href="{% url 'service:recipient_delete' recipient.pk %}">Удалить</a>
         </li>
     {% endfor %}
 </ul>
+{% endblock %}

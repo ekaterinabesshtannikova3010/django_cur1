@@ -1,0 +1,26 @@
+
+<h1>Список сообщений</h1>
+<a href="{% url 'service:message_create' %}">Добавить сообщение</a>
+<table>
+    <thead>
+        <tr>
+            <th>Тема</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+        <tr>
+            <td>{{ message.subject }}</td>
+            <td>
+                <a href="{% url 'service:message_edit' message.pk %}">Редактировать</a>
+                <form action="{% url 'service:message_delete' message.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        <a href="{% url 'service:recipient_list' %}">Вернуться на главную</a>
+        {% endfor %}
+    </tbody>
+</table>

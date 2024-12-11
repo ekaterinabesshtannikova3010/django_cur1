@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список рассылок</title>
+</head>
+<body>
+    <h1>Список рассылок</h1>
+    <a href="{% url 'service:mailing_create' %}">Создать новую рассылку</a>
+    <a href="{% url 'service:recipient_list' %}">На главную</a>
+    <ul>
+        {% for mailing in mailings %}
+            <li>
+                <a href="{% url 'service:mailing_detail' mailing.pk %}">{{ mailing }}</a>
+                <form action="{% url 'service:mailing_delete' mailing.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Удалить</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

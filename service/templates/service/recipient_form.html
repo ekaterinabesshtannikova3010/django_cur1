@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
+{% extends 'service/base.html' %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if subscriber %}Редактировать{% else %}Добавить{% endif %} клиента</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 </head>
 <body>
     <div class="container">
@@ -14,8 +14,8 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">{% if recipient %}Сохранить{% else %}Добавить{% endif %}</button>
-            <a href="{% url 'recipient_list' %}">Отмена</a>
+            <a href="{% url 'service:recipient_list' %}">Отмена</a>
         </form>
     </div>
 </body>
-</html>
+{% endblock %}

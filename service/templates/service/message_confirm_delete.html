@@ -1,0 +1,8 @@
+<!-- message_confirm_delete.html -->
+
+<h1>Вы уверены, что хотите удалить "{{ message.subject }}"?</h1>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Удалить</button>
+</form>
+<a href="{% url 'message_list' %}">Назад</a>

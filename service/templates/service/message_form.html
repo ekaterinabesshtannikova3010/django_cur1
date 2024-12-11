@@ -1,0 +1,8 @@
+
+<h1>{% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} сообщение</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+<a href="{% url 'service:message_list' %}">Назад</a>

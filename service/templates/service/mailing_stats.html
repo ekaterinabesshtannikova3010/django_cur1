@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика рассылок</title>
+</head>
+<body>
+    <h1>Статистика рассылок</h1>
+    <p>Общее количество рассылок: {{ total_mailings }}</p>
+    <p>Количество активных рассылок: {{ active_mailings }}</p>
+    <p>Количество уникальных получателей: {{ unique_recipients }}</p>
+    <a href="{% url 'service:recipient_list' %}">Назад</a>
+</body>
+</html>
