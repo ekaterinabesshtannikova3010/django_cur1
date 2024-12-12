@@ -1,12 +1,14 @@
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
+from django.db.models import Count
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, TemplateView
 
 from .forms import UserRegisterForm, PasswordResetForm
-from .models import User
+from .models import User, EmailCampaign
 
 
 class UserCreateView(CreateView):
@@ -50,3 +52,27 @@ class ResetPasswordView(FormView):
 class PasswordResetDoneView(View):
     def get(self, request):
         return render(request, 'user/reset_password_done.html')
+
+
+
+class CampaignStatsView(LoginRequiredMixin, TemplateView):
+    template_name = 'user/campaign_stats.html'  # Укажите ваш шаблон здесь
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Получаем количество успешных и неуспешных рассылок
+        stats = EmailCampaign.objects.values('status').annotate(count=Count('id'))
+
+        success_count = next((item['count'] for item in stats if item['status'] == 'success'), 0)
+        failed_count = next((item['count'] for item in stats if item['status'] == 'failed'), 0)
+
+        # Общее количество отправленных сообщений
+        total_count = success_count + failed_count
+
+        # Добавляем данные в контекст
+        context['success_count'] = success_count
+        context['failed_count'] = failed_count
+        context['total_count'] = total_count
+
+        return context

@@ -27,3 +27,15 @@ class User(AbstractUser):
     class Meta():
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+
+class EmailCampaign(models.Model):
+    status_choices = (
+        ('success', 'Успешно'),
+        ('failed', 'Неуспешно'),
+    )
+
+    status = models.CharField(max_length=10, choices=status_choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.status} - {self.created_at}"

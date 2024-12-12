@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика рассылок</title>
+</head>
+<body>
+    <h1>Статистика рассылок</h1>
+    <p>Количество успешных рассылок: {{ success_count }}</p>
+    <p>Количество неуспешных рассылок: {{ failed_count }}</p>
+    <p>Общее количество отправленных сообщений: {{ total_count }}</p>
+    <a href="{% url 'service:recipient_list' %}">Назад</a>
+</body>
+</html>
