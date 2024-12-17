@@ -1,5 +1,5 @@
 from django import forms
-from .models import Recipient, Message, Mailing, SendAttempt
+from .models import Recipient, Message, Mailing
 
 class RecipientForm(forms.ModelForm):
     class Meta:
@@ -27,7 +27,3 @@ class MailingForm(forms.ModelForm):
             'recipients': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
 
-class SendAttemptForm(forms.ModelForm):
-    class Meta:
-        model = SendAttempt
-        fields = ['attempt_time', 'server_response', 'status', 'campaign']

@@ -190,25 +190,25 @@
                 <p class="lead text-body-secondary">Приложение для рассылок для клиентов</p>
                 <p>
                     <li><a href="{% url 'service:mailing_stats' %}" class="text-white">Статистика</a></li>
+                    <li><a href="{% url 'service:mailing_attempts' mailing_attempts.id %}" class="text-white">Попытки рассылок</a></li>
                     {% if user.is_authenticated %}
                     <li>
-                <form method="post" action="{% url 'user:logout' %}" style="display:inline"</form>
-                    {% csrf_token %}
-                    <div style="display: flex; justify-content: center;">
-                        <button type="submit" class="btn btn-link nav-link">Выйти</button>
-                    </div>
-                    </li>
-                    {% else %}
-                    <li><a href="{% url 'user:login' %}" class="text-white">Вход</a></li>
-                    <li><a href="{% url 'user:register' %}" class="text-white">Регистрация</a></li>
-                    {% endif %}
-                    </p>
+                <form method="post" action="{% url 'user:logout' %}" style="display:inline"> </form>
+                {% csrf_token %}
+                <div style="display: flex; justify-content: center;">
+                    <button type="submit" class="btn btn-link nav-link">Выйти</button>
+                </div>
+                </li>
+                {% else %}
+                <li><a href="{% url 'user:login' %}" class="text-white">Вход</a></li>
+                <li><a href="{% url 'user:register' %}" class="text-white">Регистрация</a></li>
+                {% endif %}
+                </p>
             </div>
         </div>
     </section>
 </main>
-
-
+mailing_attempts
 {% block content %}
 {% endblock %}
 

@@ -1,9 +1,7 @@
 from django.urls import path
 from .apps import ServiceConfig
 from .views import (RecipientListView, RecipientCreateView, RecipientUpdateView,
-                    RecipientDeleteView, HomeView, MailingUpdateView, MailingCreateView, MailingListView,
-                    MailingDetailView, MailingDeleteView, SendNewsletterView, MailingStatsView, UserNewsletterView,
-                    UserClientView, ManagerDashboardView)
+                    RecipientDeleteView, HomeView, SendNewsletterView, MailingStatsView, MailingAttemptController)
 from . import views
 
 
@@ -29,8 +27,6 @@ urlpatterns = [
     path('mailing/<int:pk>/delete/',views.MailingDeleteView.as_view(), name='mailing_delete'),
     path('send-newsletter/', SendNewsletterView.as_view(), name='send_newsletter'),
     path('mailing-stats/', MailingStatsView.as_view(), name='mailing_stats'),
+    path('mailing/<int:mailing_id>/attempts/', MailingAttemptController.as_view(), name='mailing_attempts'),
 
-    path('user/newsletters/', UserNewsletterView.as_view(), name='user_newsletters'),
-    path('user/clients/', UserClientView.as_view(), name='user_clients'),
-    path('manager/dashboard/', ManagerDashboardView.as_view(), name='manager_dashboard'),
 ]

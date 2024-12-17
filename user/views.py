@@ -1,33 +1,39 @@
-from django.contrib.auth import login
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import send_mail
-from django.db.models import Count
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, FormView, TemplateView
+from django.views.generic import FormView
 
 from .forms import UserRegisterForm, PasswordResetForm
-from .models import User, EmailCampaign
+from .models import User
 
+class RegisterView(View):
+    def get(self, request):
+        return render(request, 'user/register.html')
 
-class UserCreateView(CreateView):
-    model = User
-    form_class = UserRegisterForm
-    success_url = reverse_lazy('user:login')
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = User(username=username)
+        user.set_password(password)
+        user.save()
+        return redirect('user:login')
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        self.send_welcome_email(user.email)
-        return super().form_valid(form)
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'user/login.html')
 
-    def send_welcome_email(self, user_email):
-        subject = 'Добро пожаловать в наш сервис'
-        message = 'Спасибо, что зарегистрировались в нашем сервисе!'
-        from_mail = 'dolmatova3010@yandex.ru'
-        recipient_list = [user_email]
-        send_mail(subject, message, from_mail, recipient_list)
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        try:
+            user = User.objects.get(username=username)
+            if user.check_password(password):
+                request.session['user_id'] = user.id
+                return redirect('home')
+        except User.DoesNotExist:
+            pass
+        return render(request, 'user/login.html')
+
 
 
 class ResetPasswordView(FormView):
@@ -54,25 +60,3 @@ class PasswordResetDoneView(View):
         return render(request, 'user/reset_password_done.html')
 
 
-
-class CampaignStatsView(LoginRequiredMixin, TemplateView):
-    template_name = 'user/campaign_stats.html'  # Укажите ваш шаблон здесь
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Получаем количество успешных и неуспешных рассылок
-        stats = EmailCampaign.objects.values('status').annotate(count=Count('id'))
-
-        success_count = next((item['count'] for item in stats if item['status'] == 'success'), 0)
-        failed_count = next((item['count'] for item in stats if item['status'] == 'failed'), 0)
-
-        # Общее количество отправленных сообщений
-        total_count = success_count + failed_count
-
-        # Добавляем данные в контекст
-        context['success_count'] = success_count
-        context['failed_count'] = failed_count
-        context['total_count'] = total_count
-
-        return context

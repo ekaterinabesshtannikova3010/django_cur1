@@ -1,13 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.utils.decorators import method_decorator
+from django.http import HttpResponse
 from django.views import generic, View
 
 from .forms import MessageForm, RecipientForm, MailingForm
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Mailing, Message, Recipient, Newsletter, Client
+from .models import Mailing, Message, Recipient, MailingAttempts
 
 
 class HomeView(TemplateView):
@@ -98,7 +98,7 @@ class MailingListView(ListView):
     context_object_name = 'mailings'
 
 
-class MailingCreateView(CreateView, LoginRequiredMixin):
+class MailingCreateView(CreateView):
     model = Mailing
     form_class = MailingForm
     template_name = 'service/mailing_form.html'
@@ -110,14 +110,14 @@ class MailingDetailView(DetailView):
     template_name = 'service/mailing_detail.html'
 
 
-class MailingUpdateView(LoginRequiredMixin, UpdateView):
+class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
     template_name = 'service/mailing_form.html'
     success_url = reverse_lazy('service:mailing_list')
 
 
-class MailingDeleteView(LoginRequiredMixin, DeleteView):
+class MailingDeleteView(DeleteView):
     model = Mailing
     template_name = 'service/mailing_confirm_delete.html'
     success_url = reverse_lazy('service:mailing_list')
@@ -125,8 +125,6 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
     def test_func(self):
         product = self.get_object()
         return self.request.user == product.owner or self.request.user.is_staff
-
-
 
 
 class SendNewsletterView(View):
@@ -159,7 +157,7 @@ class SendNewsletterView(View):
 
 
 
-class MailingStatsView(LoginRequiredMixin, View):
+class MailingStatsView(View):
     def get(self, request):
         total_mailings = Mailing.objects.count()
         active_mailings = Mailing.objects.filter(status='Запущена').count()
@@ -173,28 +171,27 @@ class MailingStatsView(LoginRequiredMixin, View):
         return render(request, 'service/mailing_stats.html', context)
 
 
-# Представление для пользователей
-class UserNewsletterView(View):
-    def get(self, request):
-        newsletters = Newsletter.objects.filter(user=request.user)
-        return render(request, 'user_newsletters.html', {'newsletters': newsletters})
+class MailingAttemptController(View):
+    def post(self, request, mailing_id):
+        mailing = get_object_or_404(Mailing, id=mailing_id)
+        recipients = mailing.recipients.all()
+        for recipient in recipients:
+            try:
+                response = send_mail(mailing.message.subject, mailing.message.body, 'test@yandex.ru', [recipient.email])
+                MailingAttempts.objects.create(
+                    mailing=mailing,
+                    status='Успешно',
+                    server_response=str(response)
+                )
+            except Exception as e:
+                MailingAttempts.objects.create(
+                    mailing=mailing,
+                    status='Не успешно',
+                    server_response=str(e)
+                )
+        return HttpResponse("Попытки рассылки сохранены.")
 
-    def post(self, request):
-        # Код для создания новой рассылки
-        pass
-
-class UserClientView(View):
-    def get(self, request):
-        clients = Client.objects.filter(user=request.user)
-        return render(request, 'user_clients.html', {'clients': clients})
-
-
-# Представление для менеджеров
-@method_decorator(user_is_manager, name='dispatch')
-class ManagerDashboardView(View):
-    def get(self, request):
-        clients = Client.objects.all()
-        newsletters = Newsletter.objects.all()
-        users = User.objects.all()
-        return render(request, 'manager_dashboard.html', {'clients': clients, 'newsletters': newsletters, 'users': users})
-
+    def get(self, request, mailing_id):
+        mailing_attempts = MailingAttempts.objects.filter(mailing_id=mailing_id)
+        return render(request, 'service/mailing_attempts.html',
+                      {'mailing_attempts': mailing_attempts})

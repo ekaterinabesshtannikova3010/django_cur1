@@ -47,38 +47,28 @@ class Mailing(models.Model):
             self.status = 'Запущена'
         super().save(*args, **kwargs)
 
-
-class MailingAttempt(models.Model):
+class MailingAttempts(models.Model):
+    objects = None
     attempt_time = models.DateTimeField(auto_now_add=True)  # Дата и время попытки
     status = models.CharField(max_length=10, choices=[  # Статус
         ('Успешно', 'Успешно'),
         ('Не успешно', 'Не успешно'),
     ])
     server_response = models.TextField()  # Ответ почтового сервера
-    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)  # Внешний ключ на модель «Рассылка»
 
     def __str__(self):
         return f"Попытка рассылки: {self.status} - {self.attempt_time}"
 
+# class MailingAttempt(models.Model):
+#     attempt_time = models.DateTimeField(auto_now_add=True)  # Дата и время попытки
+#     status = models.CharField(max_length=10, choices=[  # Статус
+#         ('Успешно', 'Успешно'),
+#         ('Не успешно', 'Не успешно'),
+#     ])
+#     server_response = models.TextField()  # Ответ почтового сервера
+#     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return f"Попытка рассылки: {self.status} - {self.attempt_time}"
 
-
-
-class SendAttempt(models.Model):
-    STATUS_CHOICES = [
-        ('Успешно', 'Успешно'),
-        ('Не успешно', 'Не успешно'),
-    ]
-    attempt_time = models.DateTimeField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
-    server_response = models.TextField()
-    campaign = models.ForeignKey(Mailing, on_delete=models.CASCADE)
-
-
-class Client(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-
-class Newsletter(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    content = models.TextField()

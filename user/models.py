@@ -10,8 +10,11 @@ class User(AbstractUser):
     password = models.CharField(max_length=128)
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
+    country = models.CharField(max_length=100)
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    token = models.CharField(max_length=100, verbose_name="token", blank=True, null=True)
 
-    token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -27,15 +30,3 @@ class User(AbstractUser):
     class Meta():
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
-
-class EmailCampaign(models.Model):
-    status_choices = (
-        ('success', 'Успешно'),
-        ('failed', 'Неуспешно'),
-    )
-
-    status = models.CharField(max_length=10, choices=status_choices)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.status} - {self.created_at}"

@@ -1,6 +1,7 @@
 
 <h1>Список сообщений</h1>
 <a href="{% url 'service:message_create' %}">Добавить сообщение</a>
+<a href="{% url 'service:recipient_list' %}">Вернуться на главную</a>
 <table>
     <thead>
         <tr>
@@ -20,7 +21,6 @@
                 </form>
             </td>
         </tr>
-        <a href="{% url 'service:recipient_list' %}">Вернуться на главную</a>
         {% endfor %}
     </tbody>
 </table>
