@@ -190,14 +190,21 @@
                 <p class="lead text-body-secondary">Приложение для рассылок для клиентов</p>
                 <p>
                     <li><a href="{% url 'service:mailing_stats' %}" class="text-white">Статистика</a></li>
-                    <li><a href="{% url 'service:mailing_attempts' mailing_attempts.id %}" class="text-white">Попытки рассылок</a></li>
+                    {% for mailing in mailings %}
+                    <li>
+                        <a href="{% url 'service:mailing_attempts' mailing.id %}" class="text-white">
+                            Попытки рассылки для: {{ mailing }}
+                        </a>
+                    </li>
+                    {% endfor %}
                     {% if user.is_authenticated %}
                     <li>
-                <form method="post" action="{% url 'user:logout' %}" style="display:inline"> </form>
-                {% csrf_token %}
-                <div style="display: flex; justify-content: center;">
-                    <button type="submit" class="btn btn-link nav-link">Выйти</button>
-                </div>
+                <form method="post" action="{% url 'user:logout' %}" style="display:inline">
+                    {% csrf_token %}
+                    <div style="display: flex; justify-content: center;">
+                        <button type="submit" class="btn btn-link nav-link">Выйти</button>
+                    </div>
+                </form>
                 </li>
                 {% else %}
                 <li><a href="{% url 'user:login' %}" class="text-white">Вход</a></li>
@@ -208,7 +215,7 @@
         </div>
     </section>
 </main>
-mailing_attempts
+
 {% block content %}
 {% endblock %}
 

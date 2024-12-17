@@ -13,6 +13,12 @@ from .models import Mailing, Message, Recipient, MailingAttempts
 class HomeView(TemplateView):
     template_name = 'service/base.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Передаем список рассылок в контекст
+        context['mailings'] = Mailing.objects.all()
+        return context
+
 
 class RecipientListView(ListView):
     model = Recipient
