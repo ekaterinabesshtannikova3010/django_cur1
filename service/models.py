@@ -2,7 +2,7 @@ import pytz
 from django.db import models
 from datetime import datetime
 from config import settings
-from user.models import User
+
 
 
 class Recipient(models.Model):

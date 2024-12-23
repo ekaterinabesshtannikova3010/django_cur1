@@ -13,6 +13,7 @@ psycopg2 = "^2.9.10"
 pillow = "^11.0.0"
 ipython = "^8.29.0"
 pytz = "^2024.2"
+itsdangerous = "^2.2.0"
 
 
 [tool.poetry.group.lint.dependencies]

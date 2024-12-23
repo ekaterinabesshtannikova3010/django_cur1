@@ -7,7 +7,7 @@
 <body>
     <h1>Список рассылок</h1>
     <a href="{% url 'service:mailing_create' %}">Создать новую рассылку</a>
-    <a href="{% url 'service:recipient_list' %}">На главную</a>
+    <a href="{% url 'service:home' %}">На главную</a>
     <ul>
         {% for mailing in mailings %}
             <li>

@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.views import generic, View
@@ -15,7 +15,6 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Передаем список рассылок в контекст
         context['mailings'] = Mailing.objects.all()
         return context
 
@@ -30,7 +29,7 @@ class RecipientListView(ListView):
         return render(request, 'service/recipient_list.html', {'recipients': recipients})
 
 
-class RecipientCreateView(LoginRequiredMixin, CreateView):
+class RecipientCreateView(CreateView):
     model = Recipient
     template_name = 'service/recipient_form.html'
     form_class = RecipientForm
@@ -43,7 +42,7 @@ class RecipientCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class RecipientUpdateView(LoginRequiredMixin,UpdateView):
+class RecipientUpdateView(UpdateView):
     model = Recipient
     template_name = 'service/recipient_form.html'
     form_class = RecipientForm
@@ -58,7 +57,7 @@ class RecipientUpdateView(LoginRequiredMixin,UpdateView):
         return self.request.user == product.owner or self.request.user.is_staff
 
 
-class RecipientDeleteView(LoginRequiredMixin, DeleteView):
+class RecipientDeleteView(DeleteView):
     model = Recipient
     template_name = 'service/recipient_confirm_delete.html'
     success_url = reverse_lazy('service:recipient_list')
@@ -76,19 +75,19 @@ class MessageList(generic.ListView):
     template_name = 'service/message_list.html'
     context_object_name = 'messages'
 
-class MessageCreate(generic.CreateView, LoginRequiredMixin):
+class MessageCreate(generic.CreateView):
     model = Message
     form_class = MessageForm
     template_name = 'service/message_form.html'
     success_url = reverse_lazy('service:message_list')
 
-class MessageUpdate(generic.UpdateView, LoginRequiredMixin):
+class MessageUpdate(generic.UpdateView):
     model = Message
     form_class = MessageForm
     template_name = 'service/message_form.html'
     success_url = reverse_lazy('service:message_list')
 
-class MessageDelete(generic.DeleteView, LoginRequiredMixin):
+class MessageDelete(generic.DeleteView):
     model = Message
     template_name = 'service/message_confirm_delete.html'
     success_url = reverse_lazy('service:message_list')
@@ -201,3 +200,5 @@ class MailingAttemptController(View):
         mailing_attempts = MailingAttempts.objects.filter(mailing_id=mailing_id)
         return render(request, 'service/mailing_attempts.html',
                       {'mailing_attempts': mailing_attempts})
+
+
