@@ -14,3 +14,14 @@ urlpatterns = [
     path('reset-password/', ResetPasswordView.as_view(), name='reset_password'),
     path('reset-password/done/', PasswordResetDoneView.as_view(), name='reset_password_done'),
 ]
+
+
+
+#
+
+#     path('register/', UserCreateView.as_view(), name='register'),
+#     path('email-confirm/<str:token>', email_verification, name='email-confirm'),
+#     path('profile/', UserUpdateView.as_view(), name='profile'),
+#     path('users/', UserListView.as_view(), name='users_list'),
+#     path('activity/<int:pk>/', change_activity, name='activity'),
+# ]

@@ -33,3 +33,10 @@ class RegistrationForm(UserRegisterForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Email уже зарегистрирован.")
         return email
+    
+
+#
+# class UserModeratorForm(StyleFormMixin, forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ('email', 'is_active')

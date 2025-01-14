@@ -2,7 +2,7 @@ import pytz
 from django.db import models
 from datetime import datetime
 from config import settings
-
+from user.models import User
 
 
 class Recipient(models.Model):
@@ -13,6 +13,10 @@ class Recipient(models.Model):
 
     def __str__(self):
         return f'{self.surname}'
+
+    class Meta:
+        verbose_name = 'Получатель'
+        verbose_name_plural = 'Получатели'
 
 
 class Message(models.Model):
@@ -35,6 +39,7 @@ class Mailing(models.Model):
     ])
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     recipients = models.ManyToManyField(Recipient)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Привязка к пользователю
 
     def __str__(self):
         return f"Рассылка: {self.status} - {self.message.body[:20]}"
@@ -47,6 +52,7 @@ class Mailing(models.Model):
             self.status = 'Запущена'
         super().save(*args, **kwargs)
 
+
 class MailingAttempts(models.Model):
     objects = None
     attempt_time = models.DateTimeField(auto_now_add=True)  # Дата и время попытки
@@ -56,6 +62,7 @@ class MailingAttempts(models.Model):
     ])
     server_response = models.TextField()  # Ответ почтового сервера
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)  # Внешний ключ на модель «Рассылка»
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Привязка к пользователю
 
     def __str__(self):
         return f"Попытка рассылки: {self.status} - {self.attempt_time}"
@@ -71,4 +78,3 @@ class MailingAttempts(models.Model):
 #
 #     def __str__(self):
 #         return f"Попытка рассылки: {self.status} - {self.attempt_time}"
-

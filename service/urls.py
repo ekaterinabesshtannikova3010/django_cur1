@@ -5,7 +5,7 @@ from .views import (RecipientListView, RecipientCreateView, RecipientUpdateView,
 from . import views
 
 
-app_name = ServiceConfig.name  # Убедитесь, что это возвращает правильное значение
+app_name = ServiceConfig.name
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),

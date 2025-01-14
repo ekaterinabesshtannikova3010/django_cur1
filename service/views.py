@@ -30,6 +30,9 @@ class RecipientListView(ListView):
 
 
 class RecipientCreateView(CreateView):
+    """
+        Создание пользователя.
+    """
     model = Recipient
     template_name = 'service/recipient_form.html'
     form_class = RecipientForm
@@ -49,7 +52,6 @@ class RecipientUpdateView(UpdateView):
     success_url = reverse_lazy('service:recipient_list')
 
     def get_object(self, queryset=None):
-        # Переопределяем get_object для добавления логики получения объекта
         return get_object_or_404(Recipient, pk=self.kwargs.get('pk'))
 
     def test_func(self):
@@ -58,6 +60,9 @@ class RecipientUpdateView(UpdateView):
 
 
 class RecipientDeleteView(DeleteView):
+    """
+    Удаление пользователя.
+    """
     model = Recipient
     template_name = 'service/recipient_confirm_delete.html'
     success_url = reverse_lazy('service:recipient_list')

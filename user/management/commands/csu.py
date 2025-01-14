@@ -2,6 +2,7 @@ from django.core.management import BaseCommand
 from user.models import User
 
 class Command(BaseCommand):
+    """Команда для создания суперпользователя"""
     def handle(self, *args, **options):
         user = User.objects.create(email= "test@yandex.ru")
         user.set_password("1234567/")

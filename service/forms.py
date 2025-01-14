@@ -1,6 +1,7 @@
 from django import forms
 from .models import Recipient, Message, Mailing
 
+
 class RecipientForm(forms.ModelForm):
     class Meta:
         model = Recipient
@@ -11,6 +12,7 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['subject', 'body']
+
 
 class MailingForm(forms.ModelForm):
     class Meta:
@@ -27,3 +29,17 @@ class MailingForm(forms.ModelForm):
             'recipients': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
 
+
+class MailingSettingsModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ('status',)
+
+
+class StyleFormMixin:
+    """Стилизация форм"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
