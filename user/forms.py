@@ -1,7 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-# from django.forms import forms
 from django import forms
-# from catalog.forms import StyleFormMixin
 
 from user.models import User
 
@@ -33,10 +31,3 @@ class RegistrationForm(UserRegisterForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Email уже зарегистрирован.")
         return email
-    
-
-#
-# class UserModeratorForm(StyleFormMixin, forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ('email', 'is_active')

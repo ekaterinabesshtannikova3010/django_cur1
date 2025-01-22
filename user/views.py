@@ -81,7 +81,8 @@ class RegisterView(View):
 
         send_mail(
             'Подтвердите регистрацию',
-            f'Пожалуйста, подтвердите вашу регистрацию по следующей ссылке: http://localhost:8000/confirm/{user.token}/',
+            f'Пожалуйста, подтвердите вашу регистрацию по следующей ссылке:'
+            f' http://localhost:8000/confirm/{user.token}/',
             'dolmatova3010@yandex.ru',
             [user.email],
             fail_silently=False,
@@ -104,4 +105,3 @@ class ConfirmEmailView(View):
             return HttpResponse("Регистрация подтверждена! Вы теперь можете войти.")
         else:
             return HttpResponse("Недействительный или просроченный токен.")
-

@@ -3,7 +3,10 @@ from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
 from itsdangerous import URLSafeTimedSerializer, BadSignature
-from django import forms
+
+
+# from service.models import Mailing
+
 
 class User(AbstractUser):
     username = None
@@ -46,7 +49,3 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
-
-        # permissions = [
-        #                 ('can_see_users_list', 'can see all users'),
-        #                 ('can_deactivate_user', 'can deactivate user')]

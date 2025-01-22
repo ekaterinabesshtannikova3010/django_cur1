@@ -4,7 +4,6 @@ from .views import (RecipientListView, RecipientCreateView, RecipientUpdateView,
                     RecipientDeleteView, HomeView, SendNewsletterView, MailingStatsView, MailingAttemptController)
 from . import views
 
-
 app_name = ServiceConfig.name
 
 urlpatterns = [
@@ -24,9 +23,8 @@ urlpatterns = [
     path('mailing/create/', views.MailingCreateView.as_view(), name='mailing_create'),
     path('mailing/<int:pk>/edit/', views.MailingUpdateView.as_view(), name='mailing_edit'),
     path('mailing/<int:pk>/', views.MailingDetailView.as_view(), name='mailing_detail'),
-    path('mailing/<int:pk>/delete/',views.MailingDeleteView.as_view(), name='mailing_delete'),
+    path('mailing/<int:pk>/delete/', views.MailingDeleteView.as_view(), name='mailing_delete'),
     path('send-newsletter/', SendNewsletterView.as_view(), name='send_newsletter'),
     path('mailing-stats/', MailingStatsView.as_view(), name='mailing_stats'),
     path('mailing/<int:mailing_id>/attempts/', MailingAttemptController.as_view(), name='mailing_attempts'),
-
 ]

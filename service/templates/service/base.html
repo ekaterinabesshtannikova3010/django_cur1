@@ -189,7 +189,14 @@
                 <h1 class="fw-light">Главная</h1>
                 <p class="lead text-body-secondary">Приложение для рассылок для клиентов</p>
                 <p>
-                    <li><a href="{% url 'service:mailing_stats' %}" class="text-white">Статистика</a></li>
+                    <body>
+                    <h1>Статистика рассылок</h1>
+                    <p>Общее количество рассылок: {{ total_mailings }}</p>
+                    <p>Количество активных рассылок: {{ active_mailings }}</p>
+                    <p>Количество уникальных получателей: {{ unique_recipients }}</p>
+                    <a href="{% url 'service:home' %}">Назад</a>
+
+                    </body>
                     {% for mailing in mailings %}
                     <li>
                         <a href="{% url 'service:mailing_attempts' mailing.id %}" class="text-white">
@@ -224,4 +231,5 @@
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 </body>
+
 </html>

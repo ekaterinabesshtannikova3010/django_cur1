@@ -1,6 +1,7 @@
 import pytz
 from django.db import models
 from datetime import datetime
+
 from config import settings
 from user.models import User
 
@@ -66,15 +67,3 @@ class MailingAttempts(models.Model):
 
     def __str__(self):
         return f"Попытка рассылки: {self.status} - {self.attempt_time}"
-
-# class MailingAttempt(models.Model):
-#     attempt_time = models.DateTimeField(auto_now_add=True)  # Дата и время попытки
-#     status = models.CharField(max_length=10, choices=[  # Статус
-#         ('Успешно', 'Успешно'),
-#         ('Не успешно', 'Не успешно'),
-#     ])
-#     server_response = models.TextField()  # Ответ почтового сервера
-#     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return f"Попытка рассылки: {self.status} - {self.attempt_time}"

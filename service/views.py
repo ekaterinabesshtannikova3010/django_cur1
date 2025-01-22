@@ -16,6 +16,9 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['mailings'] = Mailing.objects.all()
+        context["active_mailings"] = Mailing.objects.filter(status='Запущена').count()
+        context["unique_recipients"] = Recipient.objects.distinct().count()
+        context["total_mailings"] = Mailing.objects.count()
         return context
 
 
@@ -80,17 +83,20 @@ class MessageList(generic.ListView):
     template_name = 'service/message_list.html'
     context_object_name = 'messages'
 
+
 class MessageCreate(generic.CreateView):
     model = Message
     form_class = MessageForm
     template_name = 'service/message_form.html'
     success_url = reverse_lazy('service:message_list')
 
+
 class MessageUpdate(generic.UpdateView):
     model = Message
     form_class = MessageForm
     template_name = 'service/message_form.html'
     success_url = reverse_lazy('service:message_list')
+
 
 class MessageDelete(generic.DeleteView):
     model = Message
@@ -154,7 +160,7 @@ class SendNewsletterView(View):
                 send_mail(
                     mailing.subject,
                     mailing.body,
-                    'from@example.com',
+                    'dolmatova3010@yandex.ru',
                     [recipient.email],
                     fail_silently=False,
                 )
@@ -163,8 +169,6 @@ class SendNewsletterView(View):
         else:
             mailing.error(request, "Не выбрано сообщение для отправки.")
             return redirect('service:send_newsletter')
-
-
 
 
 class MailingStatsView(View):
@@ -187,7 +191,8 @@ class MailingAttemptController(View):
         recipients = mailing.recipients.all()
         for recipient in recipients:
             try:
-                response = send_mail(mailing.message.subject, mailing.message.body, 'test@yandex.ru', [recipient.email])
+                response = send_mail(mailing.message.subject, mailing.message.body, 'dolmatova3010@yandex.ru',
+                                     [recipient.email])
                 MailingAttempts.objects.create(
                     mailing=mailing,
                     status='Успешно',
@@ -205,5 +210,3 @@ class MailingAttemptController(View):
         mailing_attempts = MailingAttempts.objects.filter(mailing_id=mailing_id)
         return render(request, 'service/mailing_attempts.html',
                       {'mailing_attempts': mailing_attempts})
-
-

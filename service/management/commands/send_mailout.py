@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from service.models import Recipient, Message
 from django.core.mail import send_mail
 
+
 class Command(BaseCommand):
     help = 'Send newsletters to all recipients'
 
