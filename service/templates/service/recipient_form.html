@@ -1,0 +1,21 @@
+{% extends 'service/base.html' %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if subscriber %}Редактировать{% else %}Добавить{% endif %} клиента</title>
+
+</head>
+<body>
+    <div class="container">
+        <h1>{% if recipient %}Редактировать{% else %}Добавить{% endif %} клиента</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">{% if recipient %}Сохранить{% else %}Добавить{% endif %}</button>
+            <a href="{% url 'service:home' %}">Отмена</a>
+        </form>
+    </div>
+</body>
+{% endblock %}
